@@ -24,7 +24,10 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 import com.gemstone.gemfire.cache.AttributesFactory;
+import com.gemstone.gemfire.cache.Cache;
 import com.gemstone.gemfire.cache.Region;
+import com.gemstone.gemfire.cache.client.ClientCache;
+import com.gemstone.gemfire.cache.client.ClientRegionShortcut;
 import com.gemstone.gemfire.cache.client.Pool;
 
 /**
@@ -36,6 +39,8 @@ public class ClientRegionFactoryBean<K, V> extends RegionFactoryBean<K, V> imple
 
 	private Interest<K>[] interests;
 	private String poolName;
+	private ClientRegionShortcut clientRegionShortCut = ClientRegionShortcut.PROXY;
+
 	private BeanFactory beanFactory;
 
 	@Override
@@ -94,6 +99,21 @@ public class ClientRegionFactoryBean<K, V> extends RegionFactoryBean<K, V> imple
 	}
 
 	
+	
+	@Override
+	protected Region<K, V> lookupFallback(Cache cache, String regionName)
+			throws Exception {
+		Assert.isTrue(cache instanceof ClientCache, "Cache must be a client cache");
+		ClientCache clientCache = (ClientCache) cache;
+		Region<K, V> reg = clientCache. <K, V> createClientRegionFactory(clientRegionShortCut)
+							.setPoolName(poolName)
+							.create(regionName);
+		log.info("Created new client cache region [" + regionName + "]");
+	
+		return reg;
+
+	}
+
 	/**
 	 * Set the interests for this client region. Both key and regex interest are supported.
 	 * 
@@ -128,5 +148,11 @@ public class ClientRegionFactoryBean<K, V> extends RegionFactoryBean<K, V> imple
 	public void setPool(Pool pool) {
 		Assert.notNull(pool, "pool cannot be null");
 		setPoolName(pool.getName());
+	}
+	/**
+	 * @param clientRegionShortCut the clientRegionShortCut to set
+	 */
+	public void setClientRegionShortCut(ClientRegionShortcut clientRegionShortCut) {
+		this.clientRegionShortCut = clientRegionShortCut;
 	}
 }

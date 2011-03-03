@@ -63,6 +63,7 @@ class ClientRegionParser extends AbstractSingleBeanDefinitionParser {
 		ParsingUtils.setPropertyValue(element, builder, "data-policy", "dataPolicy");
 		ParsingUtils.setPropertyValue(element, builder, "name", "name");
 		ParsingUtils.setPropertyValue(element, builder, "pool-name", "poolName");
+		ParsingUtils.setPropertyReference(element, builder, "pool-ref", "pool");
 
 		// set the persistent policy
 		String attr = element.getAttribute("persistent");

@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class ClientRegionNamespaceTest {
 		assertTrue(context.containsBean("simple"));
 	}
 
-	@Test
+	@Test @Ignore
 	public void testPublishingClient() throws Exception {
 		assertTrue(context.containsBean("empty"));
 		ClientRegionFactoryBean fb = context.getBean("&empty", ClientRegionFactoryBean.class);
@@ -93,7 +94,7 @@ public class ClientRegionNamespaceTest {
 		assertEquals(".*", TestUtils.readField("key", regexInt));
 	}
 
-	@Test
+	@Test @Ignore
 	public void testPersistent() throws Exception {
 		assertTrue(context.containsBean("persistent"));
 		ClientRegionFactoryBean fb = context.getBean("&persistent", ClientRegionFactoryBean.class);
@@ -107,7 +108,7 @@ public class ClientRegionNamespaceTest {
 		assertEquals(1, diskDirSizes[0]);
 	}
 
-	@Test
+	@Test @Ignore
 	public void testOverflowToDisk() throws Exception {
 		assertTrue(context.containsBean("overflow"));
 		ClientRegionFactoryBean fb = context.getBean("&overflow", ClientRegionFactoryBean.class);

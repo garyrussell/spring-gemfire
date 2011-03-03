@@ -267,7 +267,7 @@ public abstract class GemfireCacheUtils {
 	 * @param ex
 	 * @return
 	 */
-	static DataAccessException convertQueryExceptions(RuntimeException ex) {
+	public static DataAccessException convertQueryExceptions(RuntimeException ex) {
 		if (ex instanceof IndexInvalidException) {
 			return convertGemfireAccessException((IndexInvalidException) ex);
 		}
