@@ -17,6 +17,8 @@
 package org.springframework.data.gemfire.client;
 
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -71,6 +73,8 @@ public class ClientCacheFactoryBean implements BeanNameAware, BeanFactoryAware, 
 	private BeanFactory beanFactory;
 	private String beanName;
 
+	private String[] poolLocators;
+
 	public void afterPropertiesSet() throws Exception {
 		// initialize locator
 		factoryLocator.setBeanFactory(beanFactory);
@@ -92,7 +96,18 @@ public class ClientCacheFactoryBean implements BeanNameAware, BeanFactoryAware, 
 			th.setContextClassLoader(beanClassLoader);
 			// first look for open caches
 			String msg = null;
-			cache = new ClientCacheFactory(cfgProps).create();
+			ClientCacheFactory factory = new ClientCacheFactory(cfgProps);
+			Pattern pattern = Pattern.compile("\\s*([^\\s\\[]+)\\s*\\[\\s*([^\\]]*)\\s*\\]\\s*");
+			if (poolLocators != null) {
+				for (String locator : poolLocators) {
+					Matcher matcher = pattern.matcher(locator);
+					if (matcher.matches()) {
+						factory.addPoolLocator(matcher.group(1), Integer.parseInt(matcher.group(2)));
+					}
+				}
+			}
+			cache = factory.create();
+
 			msg = "Created";
 
 			log.info(msg + " GemFire v." + CacheFactory.getVersion() + " Cache [" + cache.getName() + "]");
@@ -184,5 +199,12 @@ public class ClientCacheFactoryBean implements BeanNameAware, BeanFactoryAware, 
 	 */
 	public void setCacheXml(Resource cacheXml) {
 		this.cacheXml = cacheXml;
+	}
+
+	/**
+	 * @param poolLocators the poolLocators to set
+	 */
+	public void setPoolLocators(String[] poolLocators) {
+		this.poolLocators = poolLocators;
 	}
 }
