@@ -113,7 +113,8 @@ public class GemfireBeanFactoryLocator implements BeanFactoryLocator, BeanFactor
 					log.debug("adding key=" + name + " w/ reference=" + beanFactory);
 
 				if (beanFactories.containsKey(name) || beanFactories.putIfAbsent(name, beanFactory) != null) {
-					throw new IllegalArgumentException("a beanFactoryReference already exists for key " + factoryName);
+				    log.warn("a beanFactoryReference already exists for key " + factoryName);
+					//throw new IllegalArgumentException("a beanFactoryReference already exists for key " + factoryName);
 				}
 			}
 		}
