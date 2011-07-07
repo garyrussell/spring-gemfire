@@ -354,16 +354,20 @@ limitations under the License.
           <name>SpringFramework.org</name>
           <url>scp://static.springframework.org/var/www/domains/springframework.org/static/htdocs/spring-gemfire/snapshot-site/</url>
       </site>
-      <repository>
-          <id>spring-release</id>
-          <name>Spring Release Repository</name>
-          <url>s3://maven.springframework.org/release</url>
-      </repository>    
-      <snapshotRepository>
-          <id>spring-snapshot</id>
-          <name>Spring Snapshot Repository</name>
-          <url>s3://maven.springframework.org/snapshot</url>
-      </snapshotRepository>
+   
+        <repository>
+            <id>ngoe-internal</id>
+            <name>Internal Release Repository</name>
+            <url>http://kmltoolsdev02.isus.emc.com:8080/archiva/repository/internal
+            </url>
+        </repository>
+        <snapshotRepository>
+            <id>ngoe-snapshots</id>
+            <name>Internal Snapshot Repository</name>
+            <url>http://kmltoolsdev02.isus.emc.com:8080/archiva/repository/snapshots
+            </url>
+        </snapshotRepository>
+    
   </distributionManagement>
     
   <repositories>
